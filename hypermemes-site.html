@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HYPERMEMES — the culture layer of HyperEVM</title>
+<meta name="description" content="HYPERMEMES is a living meme culture for Hyperliquid and HyperEVM.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@700;800;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/hyperliquid-logo.png">
+<style>
+
+  :root{
+    --bg-primary:   #062C26;
+    --bg-secondary: #061D1A;
+    --card-bg:      #17171C;
+    --mint:         #85EFDC;
+    --mint-bright:  #96FBE3;
+    --lime:         #D1FF66;
+    --text-primary: #EAF5F1;
+    --text-muted:   #86A69D;
+    --border-soft:  rgba(133,239,220,0.16);
+    --font-display: "Archivo", sans-serif;
+    --font-mono:    "Space Mono", monospace;
+    --font-script:  "Caveat", cursive;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg-primary);
+    font-family:var(--font-mono);
+    color:var(--text-primary);
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  .wrap{ max-width:1440px; margin:0 auto; padding:0 clamp(20px,4vw,64px); }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--lime);
+    margin:0 0 18px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .h-display{
+    font-family:var(--font-display);
+    font-weight:900;
+    line-height:.92;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    margin:0;
+    color:var(--text-primary);
+  }
+  .muted{ color:var(--text-muted); }
+
+  /* ---------------- NAV ---------------- */
+  header.hm-nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--bg-primary);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .hm-nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px clamp(20px,4vw,64px);
+  }
+  .hm-logo{ display:flex; align-items:center; gap:10px; }
+  .hm-logo-mark{
+    width:30px; height:30px;
+    border-radius:8px;
+    background:#0d4a3f;
+    border:1px solid rgba(133,239,220,0.35);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .hm-logo-mark img{ width:20px; height:20px; object-fit:contain; }
+  .hm-logo-word{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:15px;
+    letter-spacing:.02em;
+  }
+  .hm-nav-links{ display:flex; align-items:center; gap:32px; }
+  .hm-nav-links a{
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--text-primary);
+    display:flex; align-items:center; gap:4px;
+  }
+  .hm-nav-links a:hover{ color:var(--mint); }
+  @media (max-width:640px){ .hm-nav-links{ gap:18px; } .hm-nav-links a{ font-size:10px; } }
+
+  /* ---------------- HERO ---------------- */
+  .hm-hero{
+    position:relative;
+    padding:100px 0 90px;
+    overflow:hidden;
+  }
+  .hm-hero-inner{
+    display:grid;
+    grid-template-columns:1fr .9fr;
+    gap:40px;
+    align-items:center;
+  }
+  @media (max-width:900px){ .hm-hero-inner{ grid-template-columns:1fr; } }
+
+  .hm-hero h1{
+    font-size:clamp(52px,8.6vw,128px);
+  }
+  .hm-hero h1 .line-mint{ color:var(--mint); }
+
+  .hm-hero-copy{
+    max-width:440px;
+    font-size:14.5px;
+    line-height:1.7;
+    color:var(--text-muted);
+    margin:26px 0 34px;
+  }
+  .hm-hero-actions{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:26px; }
+  .btn{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:15px 24px;
+    border-radius:100px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--mint);
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--mint); color:var(--bg-primary); }
+  .btn-primary:hover{ background:var(--mint-bright); }
+  .btn-outline{ background:transparent; color:var(--text-primary); border-color:var(--border-soft); }
+  .btn-outline:hover{ border-color:var(--mint); color:var(--mint); }
+
+  .hm-live-tag{
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; color:var(--text-muted);
+  }
+  .hm-live-tag b{ color:var(--mint); font-weight:400; }
+  .hm-live-dot{ width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 8px var(--mint); }
+
+  .hm-hero-visual{ position:relative; display:flex; align-items:center; justify-content:center; min-height:420px; }
+  .hm-ring{
+    position:absolute; border-radius:50%;
+    border:1px solid var(--border-soft);
+  }
+  .hm-ring.r1{ width:440px; height:440px; }
+  .hm-ring.r2{ width:340px; height:340px; border-color:rgba(133,239,220,0.28); }
+  .hm-blob-wrap{
+    width:380px; height:380px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #0d4a3f, #052620 70%);
+    display:flex; align-items:center; justify-content:center;
+    animation:spin 22s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .hm-blob{ width:240px; height:auto; }
+  .hm-sticky-note{
+    position:absolute; right:6%; bottom:14%;
+    background:var(--lime);
+    color:var(--bg-primary);
+    font-size:10px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:8px 12px;
+    transform:rotate(-7deg);
+    box-shadow:0 6px 14px rgba(0,0,0,.35);
+  }
+
+  /* ---------------- TICKER ---------------- */
+  .hm-ticker{
+    border-top:1px solid var(--border-soft);
+    border-bottom:1px solid var(--border-soft);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:16px 0;
+  }
+  .hm-ticker-track{
+    display:inline-flex;
+    animation:ticker 32s linear infinite;
+  }
+  .hm-ticker-track span{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-primary);
+    padding:0 22px;
+  }
+  .hm-ticker-track span i{ color:var(--mint); font-style:normal; }
+  .hm-ticker-track span.alt i{ color:var(--lime); }
+  @keyframes ticker{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* ---------------- ORIGIN STORY ---------------- */
+  .hm-section{ padding:110px 0; }
+  .hm-section.dark{ background:var(--bg-secondary); }
+
+  .hm-origin-grid{
+    display:grid;
+    grid-template-columns:.95fr 1.05fr;
+    gap:70px;
+    align-items:center;
+  }
+  @media (max-width:860px){ .hm-origin-grid{ grid-template-columns:1fr; gap:50px; } }
+
+  .hm-tweet-card{
+    background:#0b0b0d;
+    border:1px solid var(--border-soft);
+    border-radius:6px;
+    padding:22px 22px 14px;
+  }
+  .hm-tweet-top{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .hm-tweet-avatar{ width:34px; height:34px; border-radius:50%; background:var(--mint); }
+  .hm-tweet-name{ font-size:13px; font-weight:700; color:#fff; display:flex; align-items:center; gap:5px; }
+  .hm-tweet-handle{ font-size:11px; color:var(--text-muted); }
+  .hm-tweet-body{ font-size:16px; color:#f2f2f2; margin:4px 0 16px; font-family:var(--font-display); font-weight:700; }
+  .hm-tweet-media-img{ width:100%; height:auto; border-radius:12px; margin:0 0 16px; }
+  .hm-tweet-meta{ font-size:10.5px; color:var(--text-muted); margin-bottom:10px; }
+  .hm-tweet-meta b{ color:#fff; }
+  .hm-tweet-stats{ display:flex; gap:20px; font-size:11px; color:var(--text-muted); border-top:1px solid #1c1c22; padding:12px 0; }
+  .hm-tweet-stats span{ display:flex; align-items:center; gap:5px; }
+  .hm-tweet-foot{
+    display:flex; justify-content:space-between;
+    font-size:9.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text-muted); padding-top:10px;
+  }
+
+  .hm-script{
+    font-family:var(--font-script);
+    font-weight:700;
+    font-size:clamp(38px,4.5vw,58px);
+    color:var(--mint-bright);
+    margin:0 0 22px;
+  }
+  .hm-origin-copy{ font-size:14px; line-height:1.8; color:var(--text-muted); max-width:480px; }
+  .hm-origin-copy b{ color:var(--text-primary); font-weight:700; }
+  .hm-hash{
+    font-size:12px; color:var(--text-muted); margin-top:18px; word-break:break-all;
+  }
+  .hm-divider{ height:1px; background:var(--border-soft); margin:34px 0 26px; max-width:480px; }
+  .hm-stats-row{ display:flex; gap:52px; }
+  .hm-stat b{
+    display:block; font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--text-primary);
+  }
+  .hm-stat span{ font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
+
+  /* ---------------- CHART ---------------- */
+  .hm-chart-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
+  .hm-chart-head h2{ font-size:clamp(40px,6vw,84px); }
+  .hm-chart-sub{ max-width:280px; font-size:13px; color:var(--text-muted); line-height:1.7; }
+  .hm-chart-box{
+    border:1px solid var(--mint);
+    border-radius:4px;
+    padding:6px;
+  }
+  .hm-chart-inner{
+    background:#0f0f13;
+    min-height:420px;
+    border-radius:2px;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .hm-chart-loading{
+    background:#232329;
+    color:#aaa; font-size:13px;
+    padding:14px 22px; border-radius:6px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hm-chart-foot-bar{
+    background:#000; text-align:center; font-size:12px; color:#8a8a8a;
+    padding:12px; border-radius:0 0 2px 2px;
+  }
+  .hm-chart-foot-bar b{ color:#fff; }
+  .hm-chart-meta{ display:flex; justify-content:space-between; margin-top:16px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+  .hm-chart-meta .live{ display:flex; align-items:center; gap:8px; }
+  .hm-chart-meta a{ color:var(--mint); }
+
+  /* Glass stat cards — price / supply / market cap */
+  .hm-stats-glass{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin:0 0 40px;
+  }
+  @media (max-width:760px){ .hm-stats-glass{ grid-template-columns:1fr; } }
+  .hm-stat-card{
+    border-radius:20px;
+    padding:22px 24px 20px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .hm-stat-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(120% 90% at 15% 0%, rgba(133,239,220,0.10), transparent 55%);
+    pointer-events:none;
+  }
+  .hm-stat-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(133,239,220,0.5);
+    box-shadow:0 18px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .hm-stat-card .hm-sc-label{
+    display:flex; align-items:center; gap:8px;
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--text-muted); margin-bottom:14px;
+  }
+  .hm-stat-card .hm-sc-label .hm-live-dot{ width:5px; height:5px; }
+  .hm-stat-card .hm-sc-value{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(22px,2.6vw,30px);
+    line-height:1;
+    color:var(--text-primary);
+    letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums;
+  }
+  .hm-stat-card .hm-sc-sub{
+    font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-muted); margin-top:10px;
+  }
+  .hm-stat-card.accent .hm-sc-value{ color:var(--mint); }
+  .hm-stat-card.accent .hm-sc-label .hm-live-dot{ background:var(--mint); box-shadow:0 0 8px var(--mint); }
+
+  /* ---------------- FEED / CULTURE ARCHIVE ---------------- */
+  .hm-feed-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:44px; }
+  .hm-feed-head h2{ font-size:clamp(40px,6vw,84px); }
+  .hm-feed-sub{ max-width:280px; font-size:13px; color:var(--text-muted); line-height:1.7; }
+
+  .hm-feed-grid{ display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:230px; gap:4px; }
+  .hm-tile{
+    position:relative; overflow:hidden;
+    display:flex; align-items:flex-end;
+    background:linear-gradient(155deg,#0c332c,#061d1a 65%);
+  }
+  .hm-tile:nth-child(1){ grid-row:span 2; }
+  .hm-tile:nth-child(4){ grid-column:span 2; }
+  .hm-tile-fill{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(133,239,220,.16), transparent 55%),
+      linear-gradient(160deg, var(--tile-a,#0c332c), var(--tile-b,#061d1a));
+  }
+  .hm-tile-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hm-tile-label{
+    position:relative; width:100%;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 14px;
+    font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    background:linear-gradient(to top, rgba(0,0,0,.55), transparent);
+    color:var(--text-primary);
+  }
+  .hm-tile-label b{ color:var(--lime); font-weight:400; }
+  .hm-tile-tweet{
+    position:absolute; inset:10px; background:#0b0b0d; border-radius:4px; padding:12px; display:flex; flex-direction:column; gap:6px;
+  }
+  .hm-tile-tweet .hm-mini-logo{ display:flex; align-items:center; gap:6px; font-family:var(--font-display); font-weight:900; font-size:13px; color:var(--mint-bright); }
+  .hm-tile-tweet .hm-mini-logo svg{ width:16px; }
+
+  /* ---------------- GLASSES GENERATOR (fitur baru) ---------------- */
+  /* Glassmorphism tokens for the generator */
+  .hm-glass{
+    background:rgba(255,255,255,0.045);
+    backdrop-filter:blur(24px) saturate(140%);
+    -webkit-backdrop-filter:blur(24px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.10);
+    box-shadow:0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .hm-editor{ width:100%; max-width:560px; justify-self:end; }
+
+  /* Empty state — one big square glass box, fully clickable/droppable */
+  .hm-editor-empty{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:28px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px;
+    cursor:pointer;
+    text-align:center;
+    padding:40px;
+    transition:border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .hm-editor-empty::before{
+    content:"";
+    position:absolute; inset:0; border-radius:28px;
+    padding:1px;
+    background:linear-gradient(135deg, rgba(133,239,220,0.5), rgba(133,239,220,0) 40%, rgba(209,255,102,0.35) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none;
+  }
+  .hm-editor-empty:hover{ background:rgba(133,239,220,0.06); transform:translateY(-2px); }
+  .hm-editor-empty.hover{ background:rgba(133,239,220,0.09); border-color:var(--mint); }
+  .hm-drop-icon{
+    width:64px; height:64px; border-radius:50%;
+    background:rgba(133,239,220,0.1);
+    border:1px solid rgba(133,239,220,0.35);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--mint); font-size:26px;
+  }
+  .hm-drop-title{ font-family:var(--font-display); font-weight:800; font-size:19px; text-transform:uppercase; letter-spacing:.01em; }
+  .hm-drop-hint{ font-size:11.5px; color:var(--text-muted); letter-spacing:.04em; }
+
+  /* Editor layout — copy + direction arrow on the left, card on the right */
+  .hm-glass-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+    gap:clamp(28px,4vw,64px);
+    align-items:center;
+  }
+  @media (max-width:900px){ .hm-glass-grid{ grid-template-columns:1fr; } }
+
+  .hm-glass-copy .eyebrow{ margin-bottom:14px; }
+  .hm-glass-copy h2{ font-size:clamp(34px,5.2vw,64px); margin-bottom:16px; }
+  .hm-glass-copy .hm-glass-lead{
+    max-width:440px;
+    font-size:14px; line-height:1.7; color:var(--text-muted);
+    margin-bottom:28px;
+  }
+
+  .hm-steps{ display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+  .hm-step{
+    display:flex; align-items:center; gap:14px;
+    padding:12px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    transition:border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .hm-step:hover{
+    border-color:rgba(133,239,220,0.4);
+    background:rgba(133,239,220,0.05);
+    transform:translateX(4px);
+  }
+  .hm-step-num{
+    font-family:var(--font-display); font-weight:800; font-size:12px;
+    color:var(--mint);
+    width:28px; height:28px; border-radius:50%;
+    border:1px solid rgba(133,239,220,0.4);
+    display:flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+  .hm-step-txt{
+    font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--text-primary);
+  }
+  .hm-step-txt b{ color:var(--mint); font-weight:700; }
+
+  /* Modern directional arrow — pulses toward the card */
+  .hm-direction{
+    display:flex; align-items:center; gap:16px;
+    max-width:380px;
+  }
+  .hm-direction-line{
+    flex:1; height:2px;
+    background:linear-gradient(90deg, rgba(133,239,220,0.08), rgba(133,239,220,0.85));
+    position:relative;
+    overflow:hidden;
+    border-radius:2px;
+  }
+  .hm-direction-line::after{
+    content:"";
+    position:absolute; top:-1px; left:-45%; width:45%; height:4px;
+    background:var(--mint);
+    box-shadow:0 0 14px var(--mint);
+    border-radius:2px;
+    animation:hm-dash 1.6s ease-in-out infinite;
+  }
+  @keyframes hm-dash{ 0%{ left:-45%; } 100%{ left:105%; } }
+  .hm-direction-head{
+    font-size:22px; line-height:1; color:var(--mint);
+    filter:drop-shadow(0 0 10px rgba(133,239,220,.6));
+    animation:hm-nudge-x 1.2s ease-in-out infinite;
+  }
+  @keyframes hm-nudge-x{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
+  .hm-direction-txt{
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--text-muted); white-space:nowrap;
+  }
+  @media (max-width:900px){
+    .hm-direction{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .hm-direction-line{ width:2px; height:40px; flex:none; background:linear-gradient(180deg, rgba(133,239,220,0.08), rgba(133,239,220,0.85)); }
+    .hm-direction-line::after{ left:0; top:-45%; width:4px; height:45%; animation:hm-dash-v 1.6s ease-in-out infinite; }
+    @keyframes hm-dash-v{ 0%{ top:-45%; } 100%{ top:105%; } }
+    .hm-direction-head{ transform:rotate(90deg); }
+  }
+
+  .hm-editor{ width:100%; max-width:560px; justify-self:end; }
+  @media (max-width:900px){ .hm-editor{ justify-self:auto; margin:0 auto; } }
+
+  /* Photo slot — ghost frame that looks like the spot where your face lands */
+  .hm-photo-slot{
+    width:min(56%, 250px);
+    aspect-ratio:3/4;
+    border:1.5px dashed rgba(133,239,220,0.45);
+    border-radius:18px;
+    padding:16px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    color:rgba(133,239,220,0.55);
+  }
+  .hm-photo-slot svg{ width:100%; height:100%; }
+  .hm-photo-slot-label{
+    position:absolute; bottom:8px; left:0; right:0; text-align:center;
+    font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted);
+  }
+
+  /* Filled state — canvas + floating glass controls */
+  .hm-editor-filled{ display:flex; flex-direction:column; gap:16px; }
+  .hm-stage{
+    position:relative;
+    border-radius:24px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+    background:#000;
+  }
+  .hm-stage canvas{ width:100%; height:100%; object-fit:contain; touch-action:none; cursor:default; }
+  .hm-stage-tag{
+    position:absolute; left:14px; top:14px;
+    font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-primary);
+    display:flex; align-items:center; gap:6px;
+    padding:6px 10px; border-radius:100px;
+  }
+  .hm-stage-tag::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--lime); box-shadow:0 0 6px var(--lime); }
+  .hm-stage-reset{
+    position:absolute; right:14px; top:14px;
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-primary); font-size:14px; cursor:pointer;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(0,0,0,0.35);
+  }
+  .hm-stage-reset:hover{ color:var(--mint); border-color:var(--mint); }
+
+  .hm-controls{ border-radius:22px; padding:20px 22px; display:flex; flex-direction:column; gap:16px; }
+  .hm-slider-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:520px){ .hm-slider-row{ grid-template-columns:1fr; } }
+  .hm-field{ display:flex; flex-direction:column; gap:8px; }
+  .hm-field label{ display:flex; justify-content:space-between; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+  .hm-field label b{ color:var(--mint); font-weight:400; }
+  input[type="range"]{ -webkit-appearance:none; width:100%; height:3px; border-radius:3px; outline:none; background:rgba(255,255,255,0.14); }
+  input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:15px; height:15px; border-radius:50%; background:var(--mint); border:2px solid var(--bg-primary); cursor:pointer; box-shadow:0 0 0 1px var(--mint), 0 2px 6px rgba(0,0,0,.4); }
+  input[type="range"]::-moz-range-thumb{ width:15px; height:15px; border-radius:50%; background:var(--mint); border:2px solid var(--bg-primary); cursor:pointer; }
+
+  .hm-action-row{ display:flex; gap:12px; flex-wrap:wrap; padding-top:20px; border-top:1px solid rgba(255,255,255,0.08); margin-top:6px; }
+  .hm-btn{
+    flex:1; min-width:140px;
+    font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    padding:15px 18px; border-radius:14px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.04);
+    color:var(--text-primary);
+    transition:transform .18s cubic-bezier(.2,.8,.2,1), border-color .18s ease, background .18s ease, box-shadow .18s ease, color .18s ease;
+  }
+  .hm-btn svg{ width:16px; height:16px; flex:none; }
+  .hm-btn:hover{ transform:translateY(-2px); border-color:rgba(133,239,220,0.5); background:rgba(133,239,220,0.07); color:var(--mint); }
+  .hm-btn:active{ transform:translateY(0); }
+  .hm-btn.primary{
+    background:linear-gradient(135deg, var(--mint), var(--mint-bright));
+    color:var(--bg-primary); border-color:transparent;
+    box-shadow:0 8px 24px rgba(133,239,220,0.28);
+  }
+  .hm-btn.primary:hover{ background:linear-gradient(135deg, var(--mint-bright), #b6ffe9); color:var(--bg-primary); box-shadow:0 12px 32px rgba(133,239,220,0.45); }
+  .hm-btn.share:hover{ border-color:#fff; color:#fff; background:rgba(255,255,255,0.1); }
+  .hm-file-hidden{ display:none; }
+  .hm-hint{ font-size:10.5px; line-height:1.6; color:var(--text-muted); letter-spacing:.02em; text-align:center; margin:14px 0 0; }
+
+  /* AI try-on loading overlay */
+  .hm-loading{
+    position:absolute; inset:0; z-index:5;
+    background:rgba(6,28,24,0.82); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    color:var(--text-primary); font-size:12px; letter-spacing:.04em; text-align:center; padding:24px;
+  }
+  .hm-loading-spinner{
+    width:46px; height:46px; border-radius:50%;
+    border:3px solid rgba(133,239,220,0.18);
+    border-top-color:var(--mint); border-right-color:var(--mint);
+    animation:hm-spin .8s linear infinite;
+  }
+  @keyframes hm-spin{ to{ transform:rotate(360deg); } }
+  .hm-error{ font-size:11px; line-height:1.5; color:#ff9b9b; text-align:center; margin:0; }
+
+  /* ---------------- FOOTER ---------------- */
+  footer.hm-footer{
+    border-top:1px solid var(--border-soft);
+    padding:34px clamp(20px,4vw,64px);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .hm-footer-left{ font-size:11px; letter-spacing:.04em; color:var(--text-muted); }
+  .hm-footer-right{ display:flex; gap:24px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; }
+  .hm-footer-right a{ display:flex; align-items:center; gap:6px; color:var(--text-primary); }
+  .hm-footer-right a:hover{ color:var(--mint); }
+
+  /* ---------------- REDESIGN PASS ---------------- */
+  html{ scroll-padding-top:84px; }
+  :focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* Scroll reveal */
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .hm-blob-wrap, .hm-ticker-track, .hm-direction-line::after, .hm-direction-head{ animation:none !important; }
+  }
+
+  /* Mobile nav hamburger */
+  .hm-burger{
+    display:none;
+    flex:none;
+    width:40px; height:40px;
+    border:1px solid var(--border-soft);
+    border-radius:10px;
+    background:transparent;
+    cursor:pointer;
+    flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:5px;
+  }
+  .hm-burger span{
+    width:16px; height:2px; border-radius:2px;
+    background:var(--text-primary);
+    transition:transform .25s ease, opacity .2s ease;
+  }
+  .hm-burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .hm-burger.open span:nth-child(2){ opacity:0; }
+  .hm-burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+  @media (max-width:860px){
+    .hm-burger{ display:flex; }
+    .hm-nav-links{
+      position:fixed; top:70px; left:0; right:0;
+      flex-direction:column;
+      align-items:stretch;
+      gap:0;
+      background:var(--bg-primary);
+      border-bottom:1px solid var(--border-soft);
+      padding:8px clamp(20px,4vw,64px) 20px;
+      transform:translateY(-120%);
+      transition:transform .3s cubic-bezier(.2,.8,.2,1);
+      z-index:49;
+    }
+    .hm-nav-links.open{ transform:translateY(0); }
+    .hm-nav-links a{
+      padding:16px 4px;
+      border-bottom:1px solid rgba(133,239,220,0.08);
+      font-size:13px;
+      justify-content:space-between;
+    }
+    .hm-nav-links a:last-child{ border-bottom:none; }
+  }
+
+  /* Ticker pause on hover */
+  .hm-ticker:hover .hm-ticker-track{ animation-play-state:paused; }
+
+  /* Gallery hover overlay + lightbox */
+  .hm-tile{ cursor:pointer; }
+  .hm-tile-img{ transition:transform .45s cubic-bezier(.2,.8,.2,1); }
+  .hm-tile:hover .hm-tile-img{ transform:scale(1.06); }
+  .hm-tile-hover{
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.6), transparent 55%);
+    opacity:0;
+    transition:opacity .3s ease;
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:14px;
+    font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-primary);
+    pointer-events:none;
+  }
+  .hm-tile-hover b{ color:var(--lime); font-weight:400; }
+  .hm-tile:hover .hm-tile-hover{ opacity:1; }
+
+  .hm-lightbox{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(3,16,13,0.92);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    display:none;
+    align-items:center; justify-content:center;
+    padding:clamp(16px,5vw,64px);
+  }
+  .hm-lightbox.open{ display:flex; }
+  .hm-lightbox-fig{
+    max-width:min(1100px, 92vw);
+    max-height:88vh;
+    position:relative;
+  }
+  .hm-lightbox img{
+    max-width:100%; max-height:78vh;
+    border-radius:16px;
+    border:1px solid rgba(133,239,220,0.25);
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+    display:block;
+  }
+  .hm-lightbox-close{
+    position:absolute; top:-46px; right:0;
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    color:var(--text-primary); font-size:16px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hm-lightbox-close:hover{ color:var(--mint); border-color:var(--mint); }
+  .hm-lightbox-cap{
+    margin-top:14px; text-align:center;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted);
+  }
+  .hm-lightbox-cap b{ color:var(--mint); font-weight:400; }
+
+  /* Footer contract as button */
+  .hm-footer-right button{
+    font-family:var(--font-mono);
+    font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    background:none; border:none; cursor:pointer;
+    color:var(--text-primary);
+    display:flex; align-items:center; gap:6px; padding:0;
+  }
+  .hm-footer-right button:hover{ color:var(--mint); }
+</style>
+
+<!-- Glasses compositing is done server-side via image editing API (see server.js) -->
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="hm-nav">
+  <div class="hm-nav-inner">
+    <a href="#" class="hm-logo">
+        <span class="hm-logo-mark">
+          <img src="assets/hyperliquid.png" alt="HYPERMEMES logo">
+        </span>
+      <span class="hm-logo-word">HYPERMEMES</span>
+    </a>
+    <nav class="hm-nav-links" id="hmNavLinks">
+      <a href="#origin">Lore</a>
+      <a href="#glasses-generator">Hypershades</a>
+      <a href="#chart">Chart ⌄</a>
+      <a href="#feed">Gallery</a>
+      <a href="https://x.com/i/communities/1999383841492898111" target="_blank" rel="noopener">Community ↗</a>
+    </nav>
+    <button class="hm-burger" id="hmBurger" aria-label="Toggle menu" aria-expanded="false" aria-controls="hmNavLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hm-hero">
+  <div class="wrap hm-hero-inner">
+    <div>
+      <p class="eyebrow">/// HYPEREVM TRANSMISSION 001</p>
+      <h1 class="h-display">MEMES<br><span class="line-mint">AT</span><br><span class="line-mint">LIGHTSPEED.</span></h1>
+      <p class="hm-hero-copy">HYPERMEMES is the culture layer of Hyperliquid. A home for characters, inside jokes, and the people fast enough to catch them.</p>
+      <div class="hm-hero-actions">
+        <a href="#feed" class="btn btn-primary">Enter the archive ↘</a>
+        <button class="btn btn-outline" onclick="navigator.clipboard && navigator.clipboard.writeText('0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9')">⧉ Copy contract</button>
+      </div>
+      <p class="hm-live-tag"><span class="hm-live-dot"></span> LIVE ON HYPEREVM · <b>0x1C66...A1D9</b></p>
+    </div>
+    <div class="hm-hero-visual">
+      <div class="hm-ring r1"></div>
+      <div class="hm-ring r2"></div>
+      <div class="hm-blob-wrap">
+        <img class="hm-blob" src="assets/hyperliquid-logo.png" alt="HYPERMEMES logo">
+      </div>
+      <a href="https://x.com/i/communities/1999383841492898111" target="_blank" rel="noopener" class="hm-sticky-note">Join the community ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TICKER ================= -->
+<div class="hm-ticker">
+  <div class="hm-ticker-track" id="hmTickerTrack"></div>
+</div>
+
+<!-- ================= ORIGIN STORY ================= -->
+<section class="hm-section" id="origin">
+  <div class="wrap hm-origin-grid">
+    <img class="hm-tweet-media-img reveal" src="assets/lore-hypermemes.png" alt="Hypermemes lore artwork">
+    <div class="reveal">
+      <p class="eyebrow">01 / ORIGIN STORY</p>
+      <h2 class="hm-script">&ldquo;Hypermemes&rdquo;</h2>
+      <p class="hm-origin-copy"><b>$Hypermemes</b> is the main brand of memes from Jeff's. We're all in one $HYPE Hyperliquid / HyperEVM Memes ecosystem.<br><br>We're about to enter <b>Hypermemes SZN</b>.<br>We're ready to go.</p>
+      <p class="hm-hash">0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9</p>
+      <div class="hm-divider"></div>
+      <div class="hm-stats-row">
+        <div class="hm-stat"><b>10.26.24</b><span>First signal</span></div>
+        <div class="hm-stat"><b>1 / 1</b><span>Original lore</span></div>
+        <div class="hm-stat"><b>∞</b><span>Iterations</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHART ================= -->
+<section class="hm-section dark" id="chart">
+  <div class="wrap">
+    <div class="hm-chart-head reveal">
+      <div>
+        <p class="eyebrow">02 / MARKET SIGNAL</p>
+        <h2 class="h-display">THE CHART<br>IS LIVE.</h2>
+      </div>
+      <p class="hm-chart-sub muted">Watch the HYPERMEMES signal move in real time across HyperEVM.</p>
+    </div>
+    <div class="hm-stats-glass reveal">
+      <div class="hm-stat-card hm-glass accent">
+        <div class="hm-sc-label"><span class="hm-live-dot"></span> PRICE / HYPE</div>
+        <div class="hm-sc-value" id="hmStatPrice">—</div>
+        <div class="hm-sc-sub">HYPERMEMES</div>
+      </div>
+      <div class="hm-stat-card hm-glass">
+        <div class="hm-sc-label"><span class="hm-live-dot"></span> SUPPLY</div>
+        <div class="hm-sc-value" id="hmStatSupply">—</div>
+        <div class="hm-sc-sub">TOTAL CIRCULATING</div>
+      </div>
+      <div class="hm-stat-card hm-glass">
+        <div class="hm-sc-label"><span class="hm-live-dot"></span> MARKET CAP</div>
+        <div class="hm-sc-value" id="hmStatMc">—</div>
+        <div class="hm-sc-sub">LIVE · HYPEREVM</div>
+      </div>
+    </div>
+    <div class="hm-chart-box reveal">
+      <div class="hm-chart-inner">
+        <iframe src="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4?embed=1&theme=dark&info=0&trades=0&tabs=0" style="width:100%;height:420px;border:0;" title="HYPERMEMES / HYPE chart" loading="lazy"></iframe>
+      </div>
+      <div class="hm-chart-foot-bar">Tracked by <b>DEXSCREENER</b></div>
+    </div>
+    <div class="hm-chart-meta">
+      <span class="live"><span class="hm-live-dot"></span> LIVE MARKET DATA · HYPEREVM</span>
+      <a href="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4" target="_blank" rel="noopener">OPEN IN DEXSCREENER ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GLASSES GENERATOR ================= -->
+<section class="hm-section dark" id="glasses-generator">
+  <div class="wrap">
+    <div class="hm-glass-grid">
+      <div class="hm-glass-copy reveal">
+        <p class="eyebrow">03 / GLASSES GENERATOR</p>
+        <h2 class="h-display">PUT ON THE <span style="color:var(--mint-bright);">HYPERSHADES.</span></h2>
+        <p class="hm-glass-lead muted">Upload your photo and our AI fits the mint HYPERSHADES onto your face — sized, angled, and lit to match you. Download or share to X.</p>
+
+        <div class="hm-steps">
+          <div class="hm-step">
+            <span class="hm-step-num">01</span>
+            <span class="hm-step-txt">Upload your photo</span>
+          </div>
+          <div class="hm-step">
+            <span class="hm-step-num">02</span>
+            <span class="hm-step-txt">AI fits the <b>HYPERSHADES</b></span>
+          </div>
+          <div class="hm-step">
+            <span class="hm-step-num">03</span>
+            <span class="hm-step-txt">Download &amp; <b>share to X</b></span>
+          </div>
+        </div>
+
+        <div class="hm-direction" aria-hidden="true">
+          <span class="hm-direction-txt">DROP YOUR FACE</span>
+          <span class="hm-direction-line"></span>
+          <span class="hm-direction-head">→</span>
+        </div>
+      </div>
+
+      <div class="hm-editor">
+      <!-- STATE 1: empty — one big square glass box, fully clickable/droppable -->
+      <div class="hm-editor-empty hm-glass" id="hmDropzone">
+        <div class="hm-photo-slot">
+          <svg viewBox="0 0 120 150" fill="none" aria-hidden="true">
+            <g stroke="currentColor" stroke-width="3">
+              <rect x="34" y="42" width="22" height="15" rx="7"/>
+              <rect x="64" y="42" width="22" height="15" rx="7"/>
+              <path d="M56 49h8" stroke-linecap="round"/>
+              <path d="M34 47l-7-2M86 47l7-2" stroke-linecap="round"/>
+            </g>
+            <path fill="currentColor" fill-opacity=".14" d="M60 26c12 0 22 10 22 22 0 7-3 13-8 17 15 7 26 23 26 42 0 7-5 12-12 12H32c-7 0-12-5-12-12 0-19 11-35 26-42-5-4-8-10-8-17 0-12 10-22 22-22z"/>
+          </svg>
+          <span class="hm-photo-slot-label">Your face goes here</span>
+        </div>
+        <div class="hm-drop-icon">＋</div>
+        <div class="hm-drop-title">Upload Photo</div>
+        <div class="hm-drop-hint">Click or drag &amp; drop · JPG / PNG</div>
+      </div>
+      <input type="file" accept="image/*" class="hm-file-hidden" id="hmFileInput">
+
+      <!-- STATE 2: after upload — result canvas + actions, shown automatically -->
+      <div class="hm-editor-filled" id="hmEditorFilled" style="display:none;">
+        <div class="hm-stage">
+          <canvas id="hmCanvas"></canvas>
+          <div class="hm-stage-tag" id="hmStageTag">YOUR PHOTO</div>
+          <div class="hm-stage-reset" id="hmResetBtn" title="Change photo">✕</div>
+          <div class="hm-loading" id="hmLoading" style="display:none;">
+            <div class="hm-loading-spinner"></div>
+            <p>Compositing glasses with AI…</p>
+          </div>
+        </div>
+
+        <div class="hm-controls hm-glass">
+          <div class="hm-action-row">
+            <button class="hm-btn primary" id="hmDownloadBtn" title="Download">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>
+              Download
+            </button>
+            <button class="hm-btn share" id="hmShareBtn" title="Share to X">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+              Share
+            </button>
+          </div>
+          <p class="hm-error" id="hmError" style="display:none;"></p>
+        </div>
+        <p class="hm-hint">Your face + a photo = HYPERSHADES. Download or share to X.</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CULTURE ARCHIVE / FEED ================= -->
+<section class="hm-section" id="feed">
+  <div class="wrap">
+    <div class="hm-feed-head reveal">
+      <div>
+        <p class="eyebrow">04 / CULTURE ARCHIVE</p>
+        <h2 class="h-display">THE FEED<br>NEVER SLEEPS.</h2>
+      </div>
+      <p class="hm-feed-sub muted">A living collection of the signals, artifacts, and accidental masterpieces that make the chain feel like home.</p>
+    </div>
+    <div class="hm-feed-grid" id="hmFeedGrid"></div>
+  </div>
+</section>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="hm-lightbox" id="hmLightbox" role="dialog" aria-modal="true" aria-label="Meme preview">
+  <figure class="hm-lightbox-fig">
+    <button class="hm-lightbox-close" id="hmLightboxClose" aria-label="Close">✕</button>
+    <img id="hmLightboxImg" src="" alt="HYPERMEMES meme preview">
+    <figcaption class="hm-lightbox-cap" id="hmLightboxCap"></figcaption>
+  </figure>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="hm-footer">
+  <div class="hm-footer-left">HYPERMEMES / A LIVING MEME CULTURE ON HYPEREVM</div>
+  <div class="hm-footer-right">
+    <a href="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4" target="_blank" rel="noopener">Dexscreener ↗</a>
+    <a href="https://x.com/i/communities/1999383841492898111" target="_blank" rel="noopener">X Community ↗</a>
+    <button id="hmFooterCopy">⧉ Copy contract</button>
+  </div>
+</footer>
+
+<script>
+/* ---------------- Ticker content ---------------- */
+(function(){
+  const items = [
+    {t:'HYPERMEMES', i:'○', c:0},
+    {t:'HYPERLIQUID NATIVE', i:'', c:0},
+    {t:'HYPER CULTURE ONLINE', i:'✳', c:1},
+    {t:'NO PERMISSION NEEDED', i:'', c:0},
+    {t:'HYPER EVM', i:'○', c:0},
+  ];
+  const track = document.getElementById('hmTickerTrack');
+  let html = '';
+  for(let rep=0; rep<2; rep++){
+    items.forEach(it=>{
+      html += `<span class="${it.c ? 'alt' : ''}">${it.i ? '<i>'+it.i+'</i>' : ''}${it.t}</span>`;
+    });
+  }
+  track.innerHTML = html;
+})();
+
+/* ---------------- Feed grid ----------------
+   Real meme assets: assets/hypermemes-01.png ... hypermemes-22.png.
+   Each tile falls back to its gradient background if the image is missing.
+   Tiles open a lightbox on click. */
+(function(){
+  const grid = document.getElementById('hmFeedGrid');
+  let html = '';
+  for(let n=1; n<=22; n++){
+    const label = String(n).padStart(2,'0');
+    const img = `assets/hypermemes-${label}.png`;
+    if(n === 16){
+      html += `<div class="hm-tile" tabindex="0" role="button" data-img="${img}" data-label="HYPERFEED 16">
+        <img class="hm-tile-img" src="${img}" alt="HYPERMEMES meme ${label}" onerror="this.style.display='none'">
+        <div class="hm-tile-tweet">
+          <div class="hm-mini-logo">
+            <img src="assets/hyperliquid-logo.png" alt="" style="width:16px;height:auto;">
+            HYPERMEMES
+          </div>
+          <div style="font-size:10px;color:var(--text-muted);">@chameleon_jeff · Hypermemes</div>
+        </div>
+        <div class="hm-tile-label"><span>HYPERFEED 16</span><b>16 / ARCHIVE</b></div>
+        <div class="hm-tile-hover"><span>View meme</span><b>16 / ARCHIVE</b></div>
+      </div>`;
+    } else {
+      html += `<div class="hm-tile" tabindex="0" role="button" data-img="${img}" data-label="HYPERFEED ${label}">
+        <img class="hm-tile-img" src="${img}" alt="HYPERMEMES meme ${label}" onerror="this.style.display='none'">
+        <div class="hm-tile-label"><span>HYPERFEED ${label}</span><b>${label} / ARCHIVE</b></div>
+        <div class="hm-tile-hover"><span>View meme</span><b>${label} / ARCHIVE</b></div>
+      </div>`;
+    }
+  }
+  grid.innerHTML = html;
+})();
+
+/* ---------------- Lightbox ----------------
+   Click any feed tile to view the meme full size. */
+(function(){
+  const lb = document.getElementById('hmLightbox');
+  const lbImg = document.getElementById('hmLightboxImg');
+  const lbCap = document.getElementById('hmLightboxCap');
+  const lbClose = document.getElementById('hmLightboxClose');
+  const grid = document.getElementById('hmFeedGrid');
+
+  function open(tile){
+    const img = tile.getAttribute('data-img');
+    const label = tile.getAttribute('data-label');
+    lbImg.src = img;
+    lbCap.innerHTML = label + ' &nbsp;<b>HYPERMEMES / ARCHIVE</b>';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  grid.addEventListener('click', e => {
+    const tile = e.target.closest('.hm-tile');
+    if(tile) open(tile);
+  });
+  grid.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      const tile = e.target.closest('.hm-tile');
+      if(tile){ e.preventDefault(); open(tile); }
+    }
+  });
+  lbClose.addEventListener('click', close);
+  lb.addEventListener('click', e => { if(e.target === lb) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
+})();
+
+/* ---------------- Mobile nav burger ---------------- */
+(function(){
+  const burger = document.getElementById('hmBurger');
+  const links = document.getElementById('hmNavLinks');
+  if(!burger || !links) return;
+  burger.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  links.addEventListener('click', e => {
+    if(e.target.closest('a')){
+      links.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+
+/* ---------------- Footer copy contract ---------------- */
+(function(){
+  const btn = document.getElementById('hmFooterCopy');
+  if(!btn) return;
+  btn.addEventListener('click', () => {
+    navigator.clipboard && navigator.clipboard.writeText('0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9');
+    const prev = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = prev; }, 1600);
+  });
+})();
+
+/* ---------------- Scroll reveal ---------------- */
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(el => el.classList.add('in')); return; }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ---------------- Glasses Generator ----------------
+   Flow: upload photo -> POST /api/try-on-glasses -> server blends in
+   assets/kacamata.png via image editing API -> show result on canvas. */
+(function(){
+  const dropzone = document.getElementById('hmDropzone');
+  const fileInput = document.getElementById('hmFileInput');
+  const editorFilled = document.getElementById('hmEditorFilled');
+  const canvas = document.getElementById('hmCanvas');
+  const ctx = canvas.getContext('2d');
+  const resetBtn = document.getElementById('hmResetBtn');
+  const downloadBtn = document.getElementById('hmDownloadBtn');
+  const shareBtn = document.getElementById('hmShareBtn');
+  const loadingEl = document.getElementById('hmLoading');
+  const stageTag = document.getElementById('hmStageTag');
+  const errorEl = document.getElementById('hmError');
+
+  let baseSrc = null;       // user's uploaded photo (data URL)
+  let resultReady = false;
+
+  /* Empty box = full dropzone, click or drag & drop */
+  dropzone.addEventListener('click', () => fileInput.click());
+  ['dragover','dragenter'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add('hover'); }));
+  ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove('hover'); }));
+  dropzone.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if(f) handleFile(f); });
+  fileInput.addEventListener('change', e => { const f = e.target.files[0]; if(f) handleFile(f); });
+
+  function showLoading(on){ loadingEl.style.display = on ? 'flex' : 'none'; }
+  function showError(msg){ errorEl.style.display = msg ? 'block' : 'none'; errorEl.textContent = msg || ''; }
+
+  function handleFile(file){
+    showError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      const raw = reader.result;
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1024;
+        let w = img.width, h = img.height;
+        if(Math.max(w,h) > MAX){
+          const r = MAX / Math.max(w,h);
+          w = Math.round(w*r); h = Math.round(h*r);
+        }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        baseSrc = c.toDataURL('image/jpeg', 0.85);
+        const out = new Image();
+        out.onload = () => {
+          canvas.width = out.width; canvas.height = out.height;
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          ctx.drawImage(out, 0, 0);
+          dropzone.style.display = 'none';
+          editorFilled.style.display = 'flex';
+          resultReady = false;
+          stageTag.textContent = 'YOUR PHOTO';
+          tryOn();
+        };
+        out.onerror = () => showError('Could not read that image file.');
+        out.src = baseSrc;
+      };
+      img.onerror = () => showError('Could not read that image file.');
+      img.src = raw;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function tryOn(){
+    if(!baseSrc) return;
+    showLoading(true); showError('');
+    try {
+      const res = await fetch('/api/try-on-glasses', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ image: baseSrc })
+      });
+      const data = await res.json().catch(() => ({}));
+      if(!res.ok || data.error) throw new Error(data.error || ('Server error ' + res.status));
+      const out = new Image();
+      out.onload = () => {
+        canvas.width = out.width; canvas.height = out.height;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(out, 0, 0);
+        resultReady = true;
+        stageTag.textContent = 'HYPERSHADES ON';
+        showLoading(false);
+      };
+      out.onerror = () => { showLoading(false); showError('The server returned an image we could not display.'); };
+      out.src = data.image;
+    } catch(err){
+      showLoading(false);
+      showError((err && err.message) ? err.message : String(err));
+    }
+  }
+
+  resetBtn.addEventListener('click', () => {
+    baseSrc = null; resultReady = false;
+    editorFilled.style.display = 'none';
+    dropzone.style.display = 'flex';
+    fileInput.value = '';
+    showError('');
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if(!resultReady){ showError('Generate the try-on result first.'); return; }
+    const link = document.createElement('a');
+    link.download = 'hypermemes-tryon.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+
+  shareBtn.addEventListener('click', () => {
+    if(!resultReady){ showError('Generate the try-on result first.'); return; }
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], 'hypermemes-tryon.png', { type:'image/png' });
+      const shareText = 'Just tried on the HYPERSHADES 🕶️ $HYPERMEMES #HYPERMEMES #HyperEVM';
+      if(navigator.canShare && navigator.canShare({ files:[file] })){
+        try{ await navigator.share({ files:[file], text: shareText }); return; }
+        catch(err){ /* user cancelled — fall through to intent link */ }
+      }
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText), '_blank', 'noopener');
+    }, 'image/png');
+  });
+})();
+
+/* ---------------- Live token stats ----------------
+   Pulls price / supply / market cap from Dexscreener for the HYPERMEMES pair. */
+(function(){
+  const TOKEN = '0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9';
+  const PAIR  = '0x27714695c68b67dac05d48bdfcef9d23813350b4';
+  const priceEl = document.getElementById('hmStatPrice');
+  const supplyEl = document.getElementById('hmStatSupply');
+  const mcEl = document.getElementById('hmStatMc');
+
+  function fmtCompact(n){
+    if(!isFinite(n)) return '—';
+    if(n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if(n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    if(n >= 1e3) return '$' + (n/1e3).toFixed(2) + 'K';
+    return '$' + n.toFixed(2);
+  }
+  function fmtPrice(p){
+    if(!isFinite(p)) return '—';
+    if(p >= 1) return '$' + p.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:4});
+    const decimals = p === 0 ? 4 : Math.max(4, Math.min(10, -Math.floor(Math.log10(p)) + 3));
+    return '$' + p.toFixed(decimals);
+  }
+  function fmtSupply(s){
+    if(!isFinite(s)) return '—';
+    if(s >= 1e9) return (s/1e9).toFixed(2) + 'B';
+    if(s >= 1e6) return (s/1e6).toFixed(2) + 'M';
+    return Math.round(s).toLocaleString();
+  }
+
+  async function load(){
+    try {
+      const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/' + TOKEN);
+      const data = await res.json();
+      let pair = null;
+      if(data && Array.isArray(data.pairs)){
+        pair = data.pairs.find(p => p.pairAddress && p.pairAddress.toLowerCase() === PAIR.toLowerCase())
+            || data.pairs.find(p => p.chainId === 'hyperevm');
+      }
+      if(!pair){ throw new Error('no pair'); }
+      const price = parseFloat(pair.priceUsd);
+      const mc = parseFloat(pair.marketCap);
+      const fdv = parseFloat(pair.fdv);
+      const mcNum = isFinite(mc) && mc > 0 ? mc : fdv;
+      const supply = (isFinite(price) && price > 0 && isFinite(mcNum)) ? mcNum / price : NaN;
+      if(priceEl) priceEl.textContent = fmtPrice(price);
+      if(supplyEl) supplyEl.textContent = fmtSupply(supply);
+      if(mcEl) mcEl.textContent = fmtCompact(mcNum);
+    } catch(e){
+      if(priceEl) priceEl.textContent = 'OFFLINE';
+      if(supplyEl) supplyEl.textContent = '—';
+      if(mcEl) mcEl.textContent = '—';
+    }
+  }
+
+  load();
+  setInterval(load, 30000);
+})();
+</script>
+</body>
+</html>
