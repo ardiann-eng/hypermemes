@@ -11,6 +11,19 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+/* Minimal .env loader (no dependencies). Reads .env in the project root and
+   populates process.env. Lines: KEY=value. Skips comments and blanks. */
+(function loadEnv(){
+  const envPath = path.join(__dirname, '.env');
+  if (!fs.existsSync(envPath)) return;
+  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (m && !process.env[m[1]]) {
+      process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+    }
+  }
+})();
+
 const PORT = process.env.PORT || 3000;
 const KRATER_API_KEY = process.env.KRATER_API_KEY;
 if (!KRATER_API_KEY) {

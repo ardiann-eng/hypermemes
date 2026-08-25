@@ -1157,6 +1157,33 @@
     reader.readAsDataURL(file);
   }
 
+  /* Offline fallback — if the AI edit fails, manually overlay the HYPERSHADES
+     onto the user's photo so they still get a result to download/share. */
+  function fallbackOverlay(){
+    const photo = new Image();
+    photo.onload = () => {
+      canvas.width = photo.width; canvas.height = photo.height;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(photo, 0, 0);
+      const glasses = new Image();
+      glasses.onload = () => {
+        const gw = canvas.width * 0.66;
+        const gh = glasses.height * (gw / glasses.width);
+        const gx = (canvas.width - gw) / 2;
+        const gy = canvas.height * 0.26;
+        ctx.drawImage(glasses, gx, gy, gw, gh);
+        resultReady = true;
+        stageTag.textContent = 'HYPERSHADES · BASIC';
+        showLoading(false);
+        showError('AI try-on is offline — applied a basic overlay instead.');
+      };
+      glasses.onerror = () => { showLoading(false); showError('AI offline and glasses asset failed to load.'); };
+      glasses.src = 'assets/kacamata.png';
+    };
+    photo.onerror = () => { showLoading(false); showError('Could not reload your photo for the fallback.'); };
+    photo.src = baseSrc;
+  }
+
   async function tryOn(){
     if(!baseSrc) return;
     showLoading(true); showError('');
@@ -1177,11 +1204,11 @@
         stageTag.textContent = 'HYPERSHADES ON';
         showLoading(false);
       };
-      out.onerror = () => { showLoading(false); showError('The server returned an image we could not display.'); };
+      out.onerror = () => { showLoading(false); fallbackOverlay(); };
       out.src = data.image;
     } catch(err){
-      showLoading(false);
-      showError((err && err.message) ? err.message : String(err));
+      console.error('[try-on]', err);
+      fallbackOverlay();
     }
   }
 
