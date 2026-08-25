@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/hypermemes-site.html" },
+    { "source": "/api/:path*", "destination": "/api/try-on-glasses.js" }
+  ]
+}
