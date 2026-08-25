@@ -482,11 +482,7 @@
     color:var(--text-muted); white-space:nowrap;
   }
   @media (max-width:900px){
-    .hm-direction{ flex-direction:column; align-items:flex-start; gap:10px; }
-    .hm-direction-line{ width:2px; height:40px; flex:none; background:linear-gradient(180deg, rgba(133,239,220,0.08), rgba(133,239,220,0.85)); }
-    .hm-direction-line::after{ left:0; top:-45%; width:4px; height:45%; animation:hm-dash-v 1.6s ease-in-out infinite; }
-    @keyframes hm-dash-v{ 0%{ top:-45%; } 100%{ top:105%; } }
-    .hm-direction-head{ transform:rotate(90deg); }
+    .hm-direction{ display:none; }
   }
 
   .hm-editor{ width:100%; max-width:560px; justify-self:end; }
