@@ -164,7 +164,7 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' || req.method === 'HEAD') {
       let urlPath = decodeURIComponent(req.url.split('?')[0]);
-      if (urlPath === '/') urlPath = '/hypermemes-site.html';
+      if (urlPath === '/') urlPath = '/index.html';
       const filePath = path.normalize(path.join(ROOT, urlPath));
       if (!filePath.startsWith(ROOT)) { res.writeHead(403); res.end('Forbidden'); return; }
       fs.stat(filePath, (err, st) => {
