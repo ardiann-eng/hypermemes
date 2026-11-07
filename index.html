@@ -742,6 +742,7 @@
       <a href="#chart">Chart ⌄</a>
       <a href="#feed">Gallery</a>
       <a href="https://x.com/i/communities/1999383841492898111" target="_blank" rel="noopener">Community ↗</a>
+    <a href="https://x.com/hypermemesx?s=11" target="_blank" rel="noopener">Profile ↗</a>
     </nav>
     <button class="hm-burger" id="hmBurger" aria-label="Toggle menu" aria-expanded="false" aria-controls="hmNavLinks">
       <span></span><span></span><span></span>
@@ -758,9 +759,9 @@
       <p class="hm-hero-copy">HYPERMEMES is the culture layer of Hyperliquid. A home for characters, inside jokes, and the people fast enough to catch them.</p>
       <div class="hm-hero-actions">
         <a href="#feed" class="btn btn-primary">Enter the archive ↘</a>
-        <button class="btn btn-outline" onclick="navigator.clipboard && navigator.clipboard.writeText('0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9')">⧉ Copy contract</button>
+        <button class="btn btn-outline" onclick="navigator.clipboard && navigator.clipboard.writeText('0xD20C0c0dd9aA83fACb1156516577aAC3ac329042')">⧉ Copy contract</button>
       </div>
-      <p class="hm-live-tag"><span class="hm-live-dot"></span> LIVE ON HYPEREVM · <b>0x1C66...A1D9</b></p>
+      <p class="hm-live-tag"><span class="hm-live-dot"></span> LIVE ON HYPEREVM · <b>0xD20C...9042</b></p>
     </div>
     <div class="hm-hero-visual">
       <div class="hm-ring r1"></div>
@@ -786,7 +787,7 @@
       <p class="eyebrow">01 / ORIGIN STORY</p>
       <h2 class="hm-script">&ldquo;Hypermemes&rdquo;</h2>
       <p class="hm-origin-copy"><b>$Hypermemes</b> is the main brand of memes from Jeff's. We're all in one $HYPE Hyperliquid / HyperEVM Memes ecosystem.<br><br>We're about to enter <b>Hypermemes SZN</b>.<br>We're ready to go.</p>
-      <p class="hm-hash">0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9</p>
+      <p class="hm-hash">0xD20C0c0dd9aA83fACb1156516577aAC3ac329042</p>
       <div class="hm-divider"></div>
       <div class="hm-stats-row">
         <div class="hm-stat"><b>10.26.24</b><span>First signal</span></div>
@@ -1068,7 +1069,7 @@
   const btn = document.getElementById('hmFooterCopy');
   if(!btn) return;
   btn.addEventListener('click', () => {
-    navigator.clipboard && navigator.clipboard.writeText('0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9');
+    navigator.clipboard && navigator.clipboard.writeText('0xD20C0c0dd9aA83fACb1156516577aAC3ac329042');
     const prev = btn.textContent;
     btn.textContent = '✓ Copied';
     setTimeout(() => { btn.textContent = prev; }, 1600);
@@ -1241,7 +1242,7 @@
 /* ---------------- Live token stats ----------------
    Pulls price / supply / market cap from Dexscreener for the HYPERMEMES pair. */
 (function(){
-  const TOKEN = '0x1c6689be6e3b1ca667dd77c12e4dcd72c3cfa1d9';
+  const TOKEN = '0xD20C0c0dd9aA83fACb1156516577aAC3ac329042';
   const PAIR  = '0x27714695c68b67dac05d48bdfcef9d23813350b4';
   const priceEl = document.getElementById('hmStatPrice');
   const supplyEl = document.getElementById('hmStatSupply');
