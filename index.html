@@ -761,7 +761,7 @@
         <a href="#feed" class="btn btn-primary">Enter the archive ↘</a>
         <button class="btn btn-outline" onclick="navigator.clipboard && navigator.clipboard.writeText('0xD20C0c0dd9aA83fACb1156516577aAC3ac329042')">⧉ Copy contract</button>
       </div>
-      <p class="hm-live-tag"><span class="hm-live-dot"></span> LIVE ON HYPEREVM · <b>0xD20C...9042</b></p>
+      <p class="hm-live-tag"><span class="hm-live-dot"></span> LIVE ON ELYSIUM · <b>0xD20C...9042</b></p>
     </div>
     <div class="hm-hero-visual">
       <div class="hm-ring r1"></div>
@@ -806,7 +806,7 @@
         <p class="eyebrow">02 / MARKET SIGNAL</p>
         <h2 class="h-display">THE CHART<br>IS LIVE.</h2>
       </div>
-      <p class="hm-chart-sub muted">Watch the HYPERMEMES signal move in real time across HyperEVM.</p>
+      <p class="hm-chart-sub muted">Watch the HYPERMEMES signal move in real time across Elysium.</p>
     </div>
     <div class="hm-stats-glass reveal">
       <div class="hm-stat-card hm-glass accent">
@@ -822,18 +822,18 @@
       <div class="hm-stat-card hm-glass">
         <div class="hm-sc-label"><span class="hm-live-dot"></span> MARKET CAP</div>
         <div class="hm-sc-value" id="hmStatMc">—</div>
-        <div class="hm-sc-sub">LIVE · HYPEREVM</div>
+        <div class="hm-sc-sub">LIVE · ELYSIUM</div>
       </div>
     </div>
     <div class="hm-chart-box reveal">
       <div class="hm-chart-inner">
-        <iframe src="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4?embed=1&theme=dark&info=0&trades=0&tabs=0" style="width:100%;height:420px;border:0;" title="HYPERMEMES / HYPE chart" loading="lazy"></iframe>
+        <iframe src="https://dexscreener.com/elysium/0xD20C0c0dd9aA83fACb1156516577aAC3ac329042?embed=1&theme=dark&info=0&trades=0&tabs=0" style="width:100%;height:420px;border:0;" title="HYPERMEMES chart" loading="lazy"></iframe>
       </div>
       <div class="hm-chart-foot-bar">Tracked by <b>DEXSCREENER</b></div>
     </div>
     <div class="hm-chart-meta">
-      <span class="live"><span class="hm-live-dot"></span> LIVE MARKET DATA · HYPEREVM</span>
-      <a href="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4" target="_blank" rel="noopener">OPEN IN DEXSCREENER ↗</a>
+      <span class="live"><span class="hm-live-dot"></span> LIVE MARKET DATA · ELYSIUM</span>
+      <a href="https://dexscreener.com/elysium/0xD20C0c0dd9aA83fACb1156516577aAC3ac329042" target="_blank" rel="noopener">OPEN IN DEXSCREENER ↗</a>
     </div>
   </div>
 </section>
@@ -949,7 +949,7 @@
 <footer class="hm-footer">
   <div class="hm-footer-left">HYPERMEMES / A LIVING MEME CULTURE ON HYPEREVM</div>
   <div class="hm-footer-right">
-    <a href="https://dexscreener.com/hyperevm/0x27714695c68b67dac05d48bdfcef9d23813350b4" target="_blank" rel="noopener">Dexscreener ↗</a>
+    <a href="https://dexscreener.com/elysium/0xD20C0c0dd9aA83fACb1156516577aAC3ac329042" target="_blank" rel="noopener">Dexscreener ↗</a>
     <a href="https://x.com/i/communities/1999383841492898111" target="_blank" rel="noopener">X Community ↗</a>
     <button id="hmFooterCopy">⧉ Copy contract</button>
   </div>
@@ -1243,7 +1243,7 @@
    Pulls price / supply / market cap from Dexscreener for the HYPERMEMES pair. */
 (function(){
   const TOKEN = '0xD20C0c0dd9aA83fACb1156516577aAC3ac329042';
-  const PAIR  = '0x27714695c68b67dac05d48bdfcef9d23813350b4';
+  const CHAIN = 'elysium';
   const priceEl = document.getElementById('hmStatPrice');
   const supplyEl = document.getElementById('hmStatSupply');
   const mcEl = document.getElementById('hmStatMc');
@@ -1274,8 +1274,7 @@
       const data = await res.json();
       let pair = null;
       if(data && Array.isArray(data.pairs)){
-        pair = data.pairs.find(p => p.pairAddress && p.pairAddress.toLowerCase() === PAIR.toLowerCase())
-            || data.pairs.find(p => p.chainId === 'hyperevm');
+        pair = data.pairs.find(p => p.chainId && p.chainId.toLowerCase() === CHAIN);
       }
       if(!pair){ throw new Error('no pair'); }
       const price = parseFloat(pair.priceUsd);
